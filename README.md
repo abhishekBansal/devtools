@@ -1,4 +1,4 @@
-# 🔧 DevTools - Developer Utilities Platform
+# 🔧 DevTools - Common Developer Utilities CLI and Web
 
 A comprehensive collection of essential developer tools built with React and TypeScript. Available as both a web application and command-line interface.
 
