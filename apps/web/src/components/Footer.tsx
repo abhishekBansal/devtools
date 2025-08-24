@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
         <Space split="|" size="large">
           <Link href="/about">About</Link>
           <Link href="/privacy">Privacy</Link>
-          <Link href="https://github.com/yourusername/devtools" target="_blank" rel="noopener noreferrer">
+          <Link href="https://github.com/abhishekBansal/devtools" target="_blank" rel="noopener noreferrer">
             GitHub
           </Link>
         </Space>
