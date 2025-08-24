@@ -1,8 +1,14 @@
 {
-  "name": "devtools-cli",
-  "version": "1.0.0",
-  "description": "Command-line interface for devtools utilities",
+  "name": "@abhishek_bansal_npm/devtools-cli",
+  "version": "1.0.6",
+  "description": "A free collection of essential online developer tools. Convert Base64, format JSON, generate UUIDs, analyze strings, and more. Fast, simple, and easy to use.",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhishekbansal/devtools.git"
+  },
+  "author": "Abhishek Bansal",
+  "license": "MIT",
   "bin": {
     "devtools": "./bin/devtools"
   },
@@ -18,7 +24,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "publish": "npm publish --access public"
   },
   "dependencies": {
     "commander": "^12.0.0",
@@ -37,9 +44,14 @@
     "devtools",
     "base64",
     "json",
+    "xml",
     "hex",
     "timestamp",
     "uuid",
-    "developer-tools"
+    "color-converter",
+    "string-tools",
+    "cron",
+    "developer-tools",
+    "developer-experience"
   ]
 }
