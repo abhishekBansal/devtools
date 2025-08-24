@@ -1,0 +1,1 @@
+cd apps/web && npm run deploy
