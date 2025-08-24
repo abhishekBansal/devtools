@@ -14,12 +14,21 @@ A comprehensive collection of essential developer tools built with React and Typ
 - **📱 Cross-Platform** - Works on any device with a modern web browser
 - **🛠️ Developer-Focused** - Built by developers, for developers
 
+## Screenshots
+
+|                                  |                                  |                                  |
+| :--------------------------------: | :--------------------------------: | :--------------------------------: |
+|  ![DevTools Web Interface](screenshots/home.png)  |  ![DevTools CLI Usage](screenshots/search.png)  |  ![DevTools Tool Example](screenshots/string-analyzer.png)  |
+| *Web Interface* | *Search* | *Tool Example* |
+
 ## 🚀 Quick Start
 
 ### Web Interface
+
 Visit [tools.abhishekbansal.dev](https://tools.abhishekbansal.dev) to start using DevTools immediately.
 
 ### CLI Installation
+
 ```bash
 npm install -g @devtools/cli
 devtools --help
@@ -28,22 +37,27 @@ devtools --help
 ## 📚 Available Tools
 
 ### 🔐 Encoding Tools
+
 - **[Base64 Encoder/Decoder](wiki/Base64-Encoder-Decoder.md)** - Encode/decode Base64 with UTF-8 support
 - **[Hex Text Converter](wiki/Hex-Text-Converter.md)** - Convert between hex, ASCII, binary, decimal
 
 ### 📊 JSON & Data Tools
+
 - **[JSON Validator & Formatter](wiki/JSON-Validator-Formatter.md)** - Validate, format, minify JSON
 - **[XML Formatter](wiki/XML-Formatter.md)** - Format, validate, minify XML documents
 
 ### 📝 Text Tools
+
 - **[String Analyzer](wiki/String-Analyzer.md)** - Analyze text with detailed statistics
 - **[String Case Converter](wiki/String-Case-Converter.md)** - Convert between case formats
 
 ### ⏰ Time Tools
+
 - **[Timestamp Converter](wiki/Timestamp-Converter.md)** - Convert Unix timestamps & ISO dates
 - **[Cron Expression Parser](wiki/Cron-Expression-Parser.md)** - Parse and explain cron expressions
 
 ### 💻 Code Tools
+
 - **[UUID Generator](wiki/UUID-Generator.md)** - Generate UUID v4 identifiers
 - **[Color Converter](wiki/Color-Converter.md)** - Convert colors & analyze accessibility
 
@@ -71,10 +85,12 @@ devtools/
 ## 🛠️ Development
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
 ### Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/abhishekbansal/devtools.git
@@ -91,6 +107,7 @@ npm run build
 ```
 
 ### CLI Development
+
 ```bash
 # Build CLI
 npm run build:cli
@@ -102,6 +119,7 @@ node packages/cli/bin/devtools --help
 ## 📦 Deployment
 
 ### Web App
+
 ```bash
 # Build web application
 cd apps/web
@@ -112,6 +130,7 @@ npm run deploy
 ```
 
 ### CLI Package
+
 ```bash
 # Build and publish CLI
 cd packages/cli
