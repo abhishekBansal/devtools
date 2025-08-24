@@ -1,0 +1,27 @@
+{
+  "name": "devtools-monorepo",
+  "version": "1.0.0",
+  "description": "Unified devtools platform with web app and CLI",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter @devtools/web dev",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "typescript": "^5.4.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css,md}": ["prettier --write", "eslint --fix"]
+  }
+}
