@@ -14,12 +14,15 @@ A comprehensive collection of essential developer tools built with React and Typ
 - **📱 Cross-Platform** - Works on any device with a modern web browser
 - **🛠️ Developer-Focused** - Built by developers, for developers
 
-## Screenshots
+### Screenshots
 
 |                                  |                                  |                                  |
 | :--------------------------------: | :--------------------------------: | :--------------------------------: |
 |  ![DevTools Web Interface](screenshots/home.png)  |  ![DevTools CLI Usage](screenshots/search.png)  |  ![DevTools Tool Example](screenshots/string-analyzer.png)  |
 | *Web Interface* | *Search* | *Tool Example* |
+
+### CLI in Action
+![CLI Demo](screenshots/devtools_demo.gif)
 
 ## 🚀 Quick Start
 
