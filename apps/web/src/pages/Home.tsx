@@ -58,9 +58,6 @@ export const Home: React.FC = () => {
           />
         </div>
 
-        {/* Recently Used Tools */}
-        <RecentlyUsed />
-
         {/* Search Results or Categories */}
         {searchQuery.trim() ? (
           <div>
@@ -81,19 +78,24 @@ export const Home: React.FC = () => {
             )}
           </div>
         ) : (
-          toolsByCategory?.map(({ category, tools }) => (
-            <div key={category}>
-              <Title level={3}>{category}</Title>
-              <Row gutter={[24, 24]}>
-                {tools.map(tool => (
-                  <Col xs={24} sm={12} lg={8} xl={6} key={tool.slug}>
-                    <ToolCard tool={tool} />
-                  </Col>
-                ))}
-              </Row>
-              <Divider />
-            </div>
-          ))
+          <>
+            {/* Recently Used Tools */}
+            <RecentlyUsed />
+          
+            {toolsByCategory?.map(({ category, tools }) => (
+              <div key={category}>
+                <Title level={3}>{category}</Title>
+                <Row gutter={[24, 24]}>
+                  {tools.map(tool => (
+                    <Col xs={24} sm={12} lg={8} xl={6} key={tool.slug}>
+                      <ToolCard tool={tool} />
+                    </Col>
+                  ))}
+                </Row>
+                <Divider />
+              </div>
+            ))}
+          </>
         )}
       </Space>
     </>
