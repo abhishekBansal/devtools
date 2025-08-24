@@ -30,7 +30,7 @@ Visit [tools.abhishekbansal.dev](https://tools.abhishekbansal.dev) to start usin
 ### CLI Installation
 
 ```bash
-npm install -g @devtools/cli
+npm npm install -g @abhishek_bansal_npm/devtools-cli
 devtools --help
 ```
 
