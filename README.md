@@ -1,279 +1,149 @@
-# DevTools Platform
+# 🔧 DevTools - Developer Utilities Platform
 
-A unified developer tools platform providing both a web application and CLI utilities for common development tasks.
+A comprehensive collection of essential developer tools built with React and TypeScript. Available as both a web application and command-line interface.
 
-## 🎯 Features
+![DevTools Banner](https://img.shields.io/badge/DevTools-Developer%20Utilities-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)
 
-### Core Utilities
+## 🌟 Features
 
-#### Encoding & Conversion
-- **Base64 Encoder/Decoder** - Encode and decode Base64 strings with UTF-8 support
-- **Hex Converter** - Convert between hex, ASCII, binary, and decimal formats
-
-#### JSON & Data Processing  
-- **JSON Validator & Formatter** - Validate, format, and minify JSON with error highlighting
-- **XML Formatter** - Format, validate, and minify XML documents with proper indentation and error checking
-
-#### Text Processing
-- **String Analyzer** - Analyze text strings to get detailed statistics including character count, word count, and more
-- **String Case Converter** - Convert text between different case formats including camelCase, snake_case, kebab-case, and more
-
-#### Time & Scheduling
-- **Timestamp Converter** - Convert between Unix timestamps and human-readable dates
-- **Cron Expression Parser** - Parse, validate, and explain cron expressions with human-readable descriptions
-
-#### Development Tools
-- **UUID Generator** - Generate and validate UUID v4 with bulk generation support
-- **Color Converter** - Convert colors between different formats (Hex, RGB, HSL, HSV, CMYK) and analyze accessibility
-
-### Platforms
-- **Web App** - React-based SPA with responsive design and dark/light themes
-- **CLI Tool** - Node.js command-line interface for terminal workflows
-- **Shared Core** - TypeScript library used by both web and CLI applications
+- **🎨 Modern Web Interface** - Clean, responsive design with dark/light theme support
+- **⚡ Fast & Lightweight** - Built for performance with minimal dependencies
+- **🔧 CLI Interface** - Use all tools directly from your terminal
+- **📱 Cross-Platform** - Works on any device with a modern web browser
+- **🛠️ Developer-Focused** - Built by developers, for developers
 
 ## 🚀 Quick Start
 
-### Web Application
-Visit the hosted web application or run locally:
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-```
+### Web Interface
+Visit [tools.abhishekbansal.dev](https://tools.abhishekbansal.dev) to start using DevTools immediately.
 
 ### CLI Installation
-
 ```bash
-# Install globally from npm (when published)
-npm install -g devtools-cli
-
-# Or run locally
-cd packages/cli
-pnpm install
-pnpm build
-node bin/devtools --help
+npm install -g @devtools/cli
+devtools --help
 ```
 
-## 📖 CLI Usage
+## 📚 Available Tools
 
-```bash
-# Base64 operations
-devtools base64 encode "Hello World"
-devtools base64 decode "SGVsbG8gV29ybGQ="
+### 🔐 Encoding Tools
+- **[Base64 Encoder/Decoder](wiki/Base64-Encoder-Decoder.md)** - Encode/decode Base64 with UTF-8 support
+- **[Hex Text Converter](wiki/Hex-Text-Converter.md)** - Convert between hex, ASCII, binary, decimal
 
-# JSON operations
-devtools json validate '{"name": "test"}'
-devtools json format '{"name":"test","value":123}'
-devtools json minify '{\n  "name": "test"\n}'
+### 📊 JSON & Data Tools
+- **[JSON Validator & Formatter](wiki/JSON-Validator-Formatter.md)** - Validate, format, minify JSON
+- **[XML Formatter](wiki/XML-Formatter.md)** - Format, validate, minify XML documents
 
-# UUID operations
-devtools uuid generate
-devtools uuid generate --count 5
-devtools uuid validate "550e8400-e29b-41d4-a716-446655440000"
+### 📝 Text Tools
+- **[String Analyzer](wiki/String-Analyzer.md)** - Analyze text with detailed statistics
+- **[String Case Converter](wiki/String-Case-Converter.md)** - Convert between case formats
 
-# Hex conversions
-devtools hex to-ascii "48656C6C6F"
-devtools hex from-ascii "Hello"
-devtools hex to-binary "FF"
-devtools hex to-decimal "FF"
+### ⏰ Time Tools
+- **[Timestamp Converter](wiki/Timestamp-Converter.md)** - Convert Unix timestamps & ISO dates
+- **[Cron Expression Parser](wiki/Cron-Expression-Parser.md)** - Parse and explain cron expressions
 
-# Timestamp conversions
-devtools timestamp to-iso 1672531200
-devtools timestamp to-unix "2023-01-01T00:00:00.000Z"
-devtools timestamp now
-devtools timestamp format 1672531200
+### 💻 Code Tools
+- **[UUID Generator](wiki/UUID-Generator.md)** - Generate UUID v4 identifiers
+- **[Color Converter](wiki/Color-Converter.md)** - Convert colors & analyze accessibility
 
-# Cron expression operations
-devtools cron validate "0 9 * * 1-5"
-devtools cron explain "@daily"
-devtools cron expand "@hourly"
-devtools cron presets
-devtools cron presets --format json
+## 📖 Documentation
 
-# String analysis and conversion
-devtools string analyze "Hello World! How are you?"
-devtools string camel "hello world"
-devtools string pascal "hello world"
-devtools string snake "Hello World"
-devtools string kebab "Hello World"
-devtools string constant "hello world"
-devtools string title "hello world"
-devtools string sentence "HELLO WORLD"
+Each tool has comprehensive documentation in the [wiki](wiki/) folder:
 
-# XML operations
-devtools xml validate '<root><item>test</item></root>'
-devtools xml format '<root><item>test</item></root>' --indent 4
-devtools xml minify '<root>\n  <item>test</item>\n</root>'
-devtools xml analyze '<root><item>test</item></root>'
+- **Key Features** - Important functionality highlights
+- **Web UI Guide** - Step-by-step usage instructions
+- **CLI Usage** - Command-line examples and options
 
-# Color conversions
-devtools color analyze "#FF0000"
-devtools color hex-to-rgb "#FF0000"
-devtools color rgb-to-hex 255 0 0
-devtools color rgb-to-hsl 255 0 0
-devtools color hsl-to-rgb 0 100 50
-devtools color rgb-to-hsv 255 0 0
-devtools color rgb-to-cmyk 255 0 0
-devtools color cmyk-to-rgb 0 100 100 0
+## 🏗️ Project Structure
+
 ```
-
-## 🏗️ Architecture
-
-### Monorepo Structure
-```
-/
-├── packages/
-│   ├── core/          # Shared TypeScript utilities
-│   └── cli/           # Node.js CLI application
+devtools/
 ├── apps/
-│   └── web/           # React web application
-└── docs/              # Documentation
+│   ├── web/              # React web application
+│   └── cli/              # Command-line interface
+├── packages/
+│   └── core/             # Shared business logic
+├── wiki/                 # Tool documentation
+└── docs/                 # Project documentation
 ```
-
-### Core Library
-The `@devtools/core` package contains platform-agnostic TypeScript functions that power both the web and CLI applications:
-
-- Pure functions with no DOM or Node.js dependencies
-- Comprehensive error handling
-- Full TypeScript support with type definitions
-- 100% test coverage
-
-### Web Application
-- **Framework**: React 19 + TypeScript
-- **UI Library**: Ant Design
-- **Routing**: React Router
-- **Build Tool**: Vite
-- **Features**: 
-  - Responsive design
-  - Dark/light theme toggle
-  - SEO optimization with React Helmet
-  - PWA support
-  - Real-time validation
-
-### CLI Application
-- **Runtime**: Node.js 18+
-- **Framework**: Commander.js
-- **Features**:
-  - Intuitive command structure
-  - Help documentation
-  - Error handling with proper exit codes
-  - Cross-platform compatibility
 
 ## 🛠️ Development
 
 ### Prerequisites
 - Node.js 18+
-- pnpm (recommended) or npm
+- npm or yarn
 
 ### Setup
 ```bash
-# Clone repository
-git clone <repository-url>
+# Clone the repository
+git clone https://github.com/abhishekbansal/devtools.git
 cd devtools
 
 # Install dependencies
-pnpm install
+npm install
 
-# Build all packages
-pnpm build
+# Start development server
+npm run dev
 
-# Run tests
-pnpm test
-
-# Start web development
-pnpm dev
-
-# Lint all packages
-pnpm lint
-```
-
-### Adding a New Tool
-
-1. **Core Library** (`packages/core/src/`)
-   - Create new utility module (e.g., `newTool.ts`)
-   - Add comprehensive tests
-   - Export from `index.ts`
-
-2. **Web Application** (`apps/web/src/`)
-   - Add tool definition to `data/tools.ts`
-   - Create tool page component
-   - Add route to `App.tsx`
-
-3. **CLI Application** (`packages/cli/src/`)
-   - Create command module in `commands/`
-   - Register command in `index.ts`
-   - Add tests
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pnpm test
-
-# Test specific package
-pnpm --filter @devtools/core test
-pnpm --filter devtools-cli test
-
-# Watch mode
-pnpm --filter @devtools/core test:watch
-```
-
-## 📦 Building & Deployment
-
-### Web Application
-```bash
 # Build for production
-pnpm --filter @devtools/web build
+npm run build
+```
 
-# Preview production build
-pnpm --filter @devtools/web preview
+### CLI Development
+```bash
+# Build CLI
+npm run build:cli
+
+# Test CLI locally
+node packages/cli/bin/devtools --help
+```
+
+## 📦 Deployment
+
+### Web App
+```bash
+# Build web application
+cd apps/web
+npm run build
+
+# Deploy to GitHub Pages
+npm run deploy
 ```
 
 ### CLI Package
 ```bash
-# Build CLI
-pnpm --filter devtools-cli build
-
-# Test local installation
-pnpm --filter devtools-cli link -g
-devtools --help
+# Build and publish CLI
+cd packages/cli
+npm publish
 ```
-
-## 🔧 Configuration
-
-### Environment Variables (Web)
-- `VITE_GA_MEASUREMENT_ID` - Google Analytics 4 Measurement ID
-- `VITE_ADS_ENABLED` - Enable/disable ad slots (future feature)
-
-## 📝 License
-
-MIT License - see LICENSE file for details.
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
 1. Fork the repository
 2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
+3. Make your changes
+4. Add tests if applicable
 5. Submit a pull request
 
-## 🚧 Roadmap
+## 📄 License
 
-- [x] **Cron Expression Parser** - Parse, validate, and explain cron expressions
-- [ ] Additional utility tools (URL encoder, hash generators, etc.)
-- [ ] File input/output support for CLI
-- [ ] Interactive CLI mode
-- [ ] VS Code extension
-- [ ] API endpoints
-- [ ] Tool favorites and history
-- [ ] Custom tool configurations
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.MD) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [React](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/)
+- UI components from [Ant Design](https://ant.design/)
+- CLI built with [Commander.js](https://github.com/tj/commander.js)
+
+## 📞 Support
+
+- 🐛 **Issues**: [GitHub Issues](https://github.com/abhishekbansal/devtools/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/abhishekbansal/devtools/discussions)
+- 📧 **Contact**: [abhishek@example.com](mailto:abhishek@example.com)
 
 ---
 
-Built with ❤️ using React, TypeScript, and Node.js
+**Made with ❤️ by [Abhishek Bansal](https://github.com/abhishekbansal)**
