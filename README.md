@@ -142,7 +142,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.MD) f
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/abhishekbansal/devtools/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/abhishekbansal/devtools/discussions)
-- 📧 **Contact**: [abhishek@example.com](mailto:abhishek@example.com)
 
 ---
 
