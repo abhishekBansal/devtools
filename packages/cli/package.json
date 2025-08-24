@@ -1,6 +1,6 @@
 {
   "name": "@abhishek_bansal_npm/devtools-cli",
-  "version": "1.0.6",
+  "version": "1.0.11",
   "description": "A free collection of essential online developer tools. Convert Base64, format JSON, generate UUIDs, analyze strings, and more. Fast, simple, and easy to use.",
   "type": "module",
   "repository": {
@@ -15,7 +15,8 @@
   "main": "./dist/index.js",
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup src/index.ts --out-dir dist --format esm --clean",
@@ -24,12 +25,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm build",
-    "publish": "npm publish --access public"
+    "prepublishOnly": "echo 'Running prepublishOnly' && pnpm build"
   },
   "dependencies": {
-    "commander": "^12.0.0",
-    "@devtools/core": "workspace:*"
+    "commander": "^12.0.0"
   },
   "devDependencies": {
     "tsup": "^8.0.2",
@@ -53,5 +52,19 @@
     "cron",
     "developer-tools",
     "developer-experience"
-  ]
+  ],
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "outDir": "dist",
+    "format": [
+      "esm"
+    ],
+    "bundle": true,
+    "dts": false,
+    "clean": true,
+    "splitting": false,
+    "external": []
+  }
 }

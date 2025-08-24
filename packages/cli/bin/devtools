@@ -1,2 +1,6 @@
 #!/usr/bin/env node
-import '../dist/index.js';
+import('../dist/index.js').then(m => {
+  if (typeof m.default === 'function') {
+    m.default();
+  }
+});
