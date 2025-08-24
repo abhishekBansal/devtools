@@ -47,7 +47,3 @@ Visit the [DevTools Web App](https://tools.abhishekbansal.dev) to use all tools 
 ## 📖 Contributing
 
 Found an issue or have a suggestion? Check out our [main repository](https://github.com/abhishekbansal/devtools) to contribute or report issues.
-
----
-
-*This documentation is automatically generated and kept in sync with the latest tool implementations.*

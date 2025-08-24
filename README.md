@@ -120,7 +120,7 @@ npm publish
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Contributions are welcome!
 
 1. Fork the repository
 2. Create a feature branch
