@@ -1,6 +1,6 @@
 {
-  "name": "@abhishek_bansal_npm/devtools-cli",
-  "version": "1.0.11",
+  "name": "@devtools-cli/devtools-cli",
+  "version": "1.0.0",
   "description": "A free collection of essential online developer tools. Convert Base64, format JSON, generate UUIDs, analyze strings, and more. Fast, simple, and easy to use.",
   "type": "module",
   "repository": {

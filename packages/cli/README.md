@@ -1,4 +1,4 @@
-# @abhishek_bansal_npm/devtools-cli
+# @devtools-cli/devtools-cli
 
 A powerful command-line interface (CLI) for essential developer utilities. Access a wide range of tools directly from your terminal, including Base64 encoding/decoding, JSON formatting, UUID generation, timestamp conversions, and more.
 
@@ -14,9 +14,9 @@ A powerful command-line interface (CLI) for essential developer utilities. Acces
 Install the DevTools CLI globally using npm or pnpm:
 
 ```bash
-npm install -g @abhishek_bansal_npm/devtools-cli
+npm install -g @devtools-cli/devtools-cli
 # or
-pnpm install -g @abhishek_bansal_npm/devtools-cli
+pnpm install -g @devtools-cli/devtools-cli
 ```
 
 ## 🚀 Usage
