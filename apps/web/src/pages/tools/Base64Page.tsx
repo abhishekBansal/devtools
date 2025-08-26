@@ -4,7 +4,6 @@ import { CopyOutlined, ClearOutlined } from '@ant-design/icons';
 import { Helmet } from 'react-helmet-async';
 import { encodeBase64, decodeBase64 } from '@devtools/core';
 import { ToolPageWrapper } from '../../components/ToolPageWrapper';
-import { DebugPanel } from '../../components/DebugPanel';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -69,9 +68,6 @@ export const Base64Page: React.FC = () => {
           content="base64, encode, decode, base64 encoder, base64 decoder, utf8, online tool" 
         />
       </Helmet>
-
-      {/* Debug Panel - temporary */}
-      <DebugPanel />
 
       <div>
         <Title level={2}>Base64 Encoder/Decoder</Title>

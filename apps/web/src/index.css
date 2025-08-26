@@ -161,8 +161,8 @@ html.dark .ant-input-affix-wrapper.ant-input-affix-wrapper-disabled .ant-input {
 .ant-input:focus,
 .ant-input-affix-wrapper:focus,
 .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
-  border-color: #1890ff !important;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  border-color: #45a3fa !important;
+  box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2) !important;
 }
 
 /* Select dropdown colors */
@@ -250,7 +250,7 @@ html.dark input[style*="monospace"].ant-input {
 
 /* Link styling */
 a {
-  color: #1890ff;
+  color: #40a9ff;
   text-decoration: none;
 }
 

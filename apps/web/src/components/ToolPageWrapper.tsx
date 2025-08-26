@@ -31,21 +31,24 @@ export const ToolPageWrapper: React.FC<ToolPageWrapperProps> = ({
   useToolTracker();
 
   return (
-    <Content 
-      className={className}
-      style={{
-        padding: withPadding ? '24px' : 0,
-        minHeight: '100vh',
-      }}
-    >
-      <Space 
-        direction="vertical" 
-        size={spacing} 
-        style={{ width: '100%' }}
-      >
-        {children}
-      </Space>
-    </Content>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Layout className="site-layout">
+        {' '}
+        {/* Added class for potential further styling */}
+        <Content
+          className={className}
+          style={{
+            minHeight: '100vh',
+            padding: withPadding ? 24 : 0,
+            color: '#e2e8f0', // Light text color
+          }}
+        >
+          <Space direction="vertical" size={spacing} style={{ width: '100%' }}>
+            {children}
+          </Space>
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 

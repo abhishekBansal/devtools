@@ -1,10 +1,16 @@
-import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout, ConfigProvider, theme } from 'antd';
+import React, { useState } from 'react';
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom';
+import { Layout, ConfigProvider, theme, Drawer } from 'antd';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import SideNav from './components/SideNav';
 import { Home } from './pages/Home';
 import { Base64Page } from './pages/tools/Base64Page';
 import { JsonPage } from './pages/tools/JsonPage';
@@ -18,12 +24,14 @@ import XmlFormatterTool from './pages/tools/XmlFormatter';
 import ColorConverterTool from './pages/tools/ColorConverter';
 import 'antd/dist/reset.css';
 
-const { Content } = Layout;
+const { Content, Sider } = Layout;
 
 const AppContent: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
+  const location = useLocation();
+  const isToolPage = location.pathname.startsWith('/tools/');
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
-  // Add theme class to document element for CSS targeting
   React.useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
@@ -40,7 +48,6 @@ const AppContent: React.FC = () => {
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
           colorPrimary: '#1890ff',
-          // Ensure proper input colors
           colorText: isDark
             ? 'rgba(255, 255, 255, 0.85)'
             : 'rgba(0, 0, 0, 0.88)',
@@ -49,74 +56,98 @@ const AppContent: React.FC = () => {
         },
       }}
     >
-      <Layout
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <Header isDark={isDark} onThemeToggle={toggleTheme} />
-        <Content
-          style={{
-            flex: 1,
-            padding: '24px',
-            background: isDark ? '#141414' : '#f5f5f5',
-            minHeight: 'calc(100vh - 128px)',
-          }}
-        >
-          <div
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header
+          isDark={isDark}
+          onThemeToggle={toggleTheme}
+          onMenuClick={() => setDrawerVisible(true)}
+          isToolPage={isToolPage}
+        />
+        <Layout>
+          {isToolPage && (
+            <Sider
+              width={256}
+              theme={isDark ? 'dark' : 'light'}
+              className="overflow-auto h-screen sticky top-0"
+              breakpoint="lg"
+              collapsedWidth="0"
+              trigger={null}
+            >
+              <SideNav />
+            </Sider>
+          )}
+          <Drawer
+            placement="left"
+            closable={false}
+            onClose={() => setDrawerVisible(false)}
+            visible={drawerVisible}
+            bodyStyle={{ padding: 0 }}
+          >
+            <SideNav />
+          </Drawer>
+          <Content
             style={{
-              maxWidth: '1200px',
-              margin: '0 auto',
-              width: '100%',
-              background: isDark ? '#1f1f1f' : '#ffffff',
-              borderRadius: '8px',
-              padding: '24px',
-              minHeight: '100%',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              flex: 1,
+              background: isDark ? '#141414' : '#f5f5f5',
+              minHeight: 'calc(100vh - 128px)',
             }}
           >
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/tools/base64-encoder-decoder"
-                element={<Base64Page />}
-              />
-              <Route
-                path="/tools/json-validator-formatter"
-                element={<JsonPage />}
-              />
-              <Route path="/tools/uuid-generator" element={<UuidPage />} />
-              <Route path="/tools/hex-text-converter" element={<HexPage />} />
-              <Route
-                path="/tools/timestamp-converter"
-                element={<TimestampPage />}
-              />
-              <Route
-                path="/tools/cron-expression-parser"
-                element={<CronPage />}
-              />
-              <Route
-                path="/tools/string-analyzer"
-                element={<StringAnalyzerTool />}
-              />
-              <Route
-                path="/tools/string-case-converter"
-                element={<StringCaseConverterTool />}
-              />
-              <Route
-                path="/tools/xml-formatter"
-                element={<XmlFormatterTool />}
-              />
-              <Route
-                path="/tools/color-converter"
-                element={<ColorConverterTool />}
-              />
-              <Route path="*" element={<div>Page not found</div>} />
-            </Routes>
-          </div>
-        </Content>
+            <div
+              style={{
+                maxWidth: '1200px',
+                margin: '0 auto',
+                width: '100%',
+                background: isDark ? '#1f1f1f' : '#ffffff',
+                borderRadius: '8px',
+                padding: '24px',
+                minHeight: '100%',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/tools/base64-encoder-decoder"
+                  element={<Base64Page />}
+                />
+                <Route
+                  path="/tools/json-validator-formatter"
+                  element={<JsonPage />}
+                />
+                <Route path="/tools/uuid-generator" element={<UuidPage />} />
+                <Route
+                  path="/tools/hex-text-converter"
+                  element={<HexPage />}
+                />
+                <Route
+                  path="/tools/timestamp-converter"
+                  element={<TimestampPage />}
+                />
+                <Route
+                  path="/tools/cron-expression-parser"
+                  element={<CronPage />}
+                />
+                <Route
+                  path="/tools/string-analyzer"
+                  element={<StringAnalyzerTool />}
+                />
+                <Route
+                  path="/tools/string-case-converter"
+                  element={<StringCaseConverterTool />}
+                />
+                <Route
+                  path="/tools/xml-formatter"
+                  element={<XmlFormatterTool />}
+                />
+                <Route
+                  path="/tools/color-converter"
+                  element={<ColorConverterTool />}
+                />
+                <Route path="*" element={<div>Page not found</div>} />
+              </Routes>
+            </div>
+          </Content>
+        </Layout>
         <Footer />
       </Layout>
     </ConfigProvider>
