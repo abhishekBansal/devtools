@@ -53,6 +53,7 @@ devtools --help
 
 - **[String Analyzer](wiki/String-Analyzer.md)** - Analyze text with detailed statistics
 - **[String Case Converter](wiki/String-Case-Converter.md)** - Convert between case formats
+- **[Text Diff Tool](wiki/Text-Diff-Tool.md)** - Compare and visualize text differences
 
 ### ⏰ Time Tools
 
