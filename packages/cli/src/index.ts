@@ -17,7 +17,7 @@ const program = new Command();
 program
   .name('devtools')
   .description('Developer utilities CLI')
-  .version('1.0.0');
+  .version('1.1.0');
 
 // Add all commands
 program.addCommand(createBase64Command());
