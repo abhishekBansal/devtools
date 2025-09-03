@@ -15,6 +15,7 @@ Welcome to the DevTools Wiki! This documentation provides comprehensive usage gu
 ### 📝 Text Tools
 - **[String Analyzer](String-Analyzer.md)** - Analyze text strings with detailed statistics
 - **[String Case Converter](String-Case-Converter.md)** - Convert between different case formats
+- **[Text Diff Tool](Text-Diff-Tool.md)** - Compare and visualize differences between text blocks
 
 ### ⏰ Time Tools
 - **[Timestamp Converter](Timestamp-Converter.md)** - Convert between Unix timestamps and human-readable dates

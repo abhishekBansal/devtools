@@ -10,6 +10,7 @@ import { createCronCommand } from './commands/cron.js';
 import { stringCommand } from './commands/string.js';
 import { xmlCommand } from './commands/xml.js';
 import { colorCommand } from './commands/color.js';
+import { diffCommand } from './commands/diff.js';
 
 const program = new Command();
 
@@ -28,6 +29,7 @@ program.addCommand(createCronCommand());
 program.addCommand(stringCommand());
 program.addCommand(xmlCommand());
 program.addCommand(colorCommand());
+program.addCommand(diffCommand());
 
 // Parse command line arguments
 program.parse(process.argv);

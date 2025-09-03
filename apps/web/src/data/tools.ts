@@ -88,6 +88,14 @@ export const tools: ToolDef[] = [
     keywords: ['color', 'convert', 'hex', 'rgb', 'hsl', 'hsv', 'cmyk', 'accessibility', 'wcag'],
     related: ['css-formatter', 'image-color-extractor'],
   },
+  {
+    slug: 'text-diff',
+    title: 'Text Diff Tool',
+    category: 'Text',
+    description: 'Compare two texts and visualize differences with line-by-line, word-by-word, or character-by-character comparison',
+    keywords: ['diff', 'compare', 'text', 'merge', 'changes', 'git', 'version', 'side-by-side'],
+    related: ['string-analyzer', 'string-case-converter', 'text-formatter'],
+  },
 ];
 
 export const categories = [

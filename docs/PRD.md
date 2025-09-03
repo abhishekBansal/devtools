@@ -5,7 +5,7 @@ Build a **unified devtools platform** that runs both:
 - **Browser-based web app** (React + TypeScript + AntD, hosted on GitHub Pages).
 - **Node.js CLI utility** (powered by the same logic as web app).
 
-The **core utilities** (Base64, JSON Validator, etc.) will live in a **shared library** that is consumed by both the web frontend and CLI, ensuring **single source of truth**.
+The **core utilities** (Base64, JSON Validator, Text Diff, etc.) will live in a **shared library** that is consumed by both the web frontend and CLI, ensuring **single source of truth**.
 
 ---
 
@@ -80,6 +80,7 @@ The **core utilities** (Base64, JSON Validator, etc.) will live in a **shared li
 - `devtools hex to-ascii "4869"` → `Hi`
 - `devtools timestamp to-date 1692272347` → `2025-08-17T18:39:07Z`
 - `devtools uuid generate` → `550e8400-e29b-41d4-a716-446655440000`
+- `devtools diff text "old text" "new text"` → `Colored diff output with statistics`
 
 ### CLI Features
 
@@ -163,7 +164,7 @@ export const base64Command = new Command("base64")
 ## 8. 🗺️ Rollout Plan
 
 1. Setup **monorepo** (`core`, `web`, `cli`).
-2. Implement **core utilities** (Base64, JSON, Hex, Timestamp, UUID).
+2. Implement **core utilities** (Base64, JSON, Hex, Timestamp, UUID, Text Diff).
 3. Build **web app** consuming core.
 4. Build **CLI** consuming core.
 5. Publish CLI to **npm** (`devtools-cli`).

@@ -97,3 +97,18 @@ export {
   type CmykColor,
   type ColorAnalysis,
 } from './color.js';
+
+// Diff utilities
+export {
+  diffText,
+  diffLines,
+  diffWords,
+  diffCharacters,
+  diffLinesWithInlineChanges,
+  createUnifiedDiff,
+  createSideBySideDiff,
+  type DiffResult,
+  type DiffLine,
+  type DiffMode,
+  type InlineChange,
+} from './diff.js';
