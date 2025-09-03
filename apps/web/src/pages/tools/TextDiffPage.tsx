@@ -8,6 +8,7 @@ import {
   type DiffLine
 } from '@devtools/core';
 import ToolPageWrapper from '../../components/ToolPageWrapper';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -17,6 +18,7 @@ const TextDiffTool: React.FC = () => {
   const [text2, setText2] = useState('');
   const [diffLines, setDiffLines] = useState<DiffLine[]>([]);
   const [unifiedDiff, setUnifiedDiff] = useState<string>('');
+  const { isDark } = useTheme();
 
   React.useEffect(() => {
     if (text1 || text2) {
@@ -100,7 +102,9 @@ const TextDiffTool: React.FC = () => {
 
       // Add the highlighted change
       const changeText = line.content.slice(change.startIndex, change.endIndex);
-      const highlightColor = change.type === 'added' ? '#b7eb8f' : '#ffccc7'; // Light green/red
+      const highlightColor = isDark 
+        ? (change.type === 'added' ? '#274916' : '#58181c') // Darker green/red for dark mode
+        : (change.type === 'added' ? '#b7eb8f' : '#ffccc7'); // Light green/red for light mode
       parts.push(
         <span
           key={`change-${index}`}
@@ -131,12 +135,22 @@ const TextDiffTool: React.FC = () => {
   };
 
   const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'added': return '#52c41a';   // Ant Design green
-      case 'removed': return '#ff4d4f'; // Ant Design red
-      case 'modified': return '#1890ff'; // Ant Design blue
-      case 'unchanged': return '#8c8c8c'; // Ant Design gray
-      default: return '#000000';
+    if (isDark) {
+      switch (type) {
+        case 'added': return '#73d13d';   // Brighter green for dark mode
+        case 'removed': return '#ff7875'; // Brighter red for dark mode
+        case 'modified': return '#40a9ff'; // Brighter blue for dark mode
+        case 'unchanged': return '#bfbfbf'; // Lighter gray for dark mode
+        default: return '#ffffff';
+      }
+    } else {
+      switch (type) {
+        case 'added': return '#52c41a';   // Ant Design green
+        case 'removed': return '#ff4d4f'; // Ant Design red
+        case 'modified': return '#1890ff'; // Ant Design blue
+        case 'unchanged': return '#8c8c8c'; // Ant Design gray
+        default: return '#000000';
+      }
     }
   };
 
@@ -151,12 +165,22 @@ const TextDiffTool: React.FC = () => {
   };
 
   const getLineBackgroundColor = (type: string) => {
-    switch (type) {
-      case 'added': return '#f6ffed';    // Very light green
-      case 'removed': return '#fff2f0';  // Very light red
-      case 'modified': return '#e6f7ff'; // Very light blue
-      case 'unchanged': return '#fafafa'; // Very light gray
-      default: return '#ffffff';
+    if (isDark) {
+      switch (type) {
+        case 'added': return '#162312';    // Dark green background
+        case 'removed': return '#2a1215';  // Dark red background
+        case 'modified': return '#111b26'; // Dark blue background
+        case 'unchanged': return '#1f1f1f'; // Dark gray background
+        default: return '#141414';
+      }
+    } else {
+      switch (type) {
+        case 'added': return '#f6ffed';    // Very light green
+        case 'removed': return '#fff2f0';  // Very light red
+        case 'modified': return '#e6f7ff'; // Very light blue
+        case 'unchanged': return '#fafafa'; // Very light gray
+        default: return '#ffffff';
+      }
     }
   };
 
@@ -348,8 +372,9 @@ This is line 4`
                 <div style={{ 
                   maxHeight: '400px', 
                   overflowY: 'auto',
-                  border: '1px solid #f0f0f0',
-                  borderRadius: '6px'
+                  border: isDark ? '1px solid #434343' : '1px solid #f0f0f0',
+                  borderRadius: '6px',
+                  backgroundColor: isDark ? '#1f1f1f' : '#ffffff'
                 }}>
                   {diffLines.length > 0 ? (
                     diffLines.map((line: DiffLine, index: number) => (
@@ -363,7 +388,8 @@ This is line 4`
                           fontSize: '13px',
                           lineHeight: '1.4',
                           whiteSpace: 'pre-wrap',
-                          borderBottom: '1px solid #f5f5f5'
+                          borderBottom: isDark ? '1px solid #434343' : '1px solid #f5f5f5',
+                          color: isDark ? '#ffffff' : '#000000'
                         }}
                       >
                         <span style={{ 
@@ -417,11 +443,12 @@ This is line 4`
                   fontSize: '13px',
                   margin: 0,
                   padding: '12px',
-                  backgroundColor: '#fafafa',
-                  border: '1px solid #f0f0f0',
+                  backgroundColor: isDark ? '#1f1f1f' : '#fafafa',
+                  border: isDark ? '1px solid #434343' : '1px solid #f0f0f0',
                   borderRadius: '4px',
                   maxHeight: '300px',
-                  overflowY: 'auto'
+                  overflowY: 'auto',
+                  color: isDark ? '#ffffff' : '#000000'
                 }}>
                   {unifiedDiff}
                 </pre>
