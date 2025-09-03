@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      react-icons:
+        specifier: ^5.5.0
+        version: 5.5.0(react@19.1.1)
     devDependencies:
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.0.0
@@ -102,9 +106,9 @@ importers:
 
   packages/cli:
     dependencies:
-      '@devtools/core':
-        specifier: workspace:*
-        version: link:../core
+      chalk:
+        specifier: ^5.6.0
+        version: 5.6.0
       commander:
         specifier: ^12.0.0
         version: 12.1.0
@@ -3022,6 +3026,11 @@ packages:
     resolution: {integrity: sha512-rYUYHeus+i27MvFE+Jaa4WsyBKGkL6qVgbJvSBoX8mbsWoABJXdEO0bZyi0F6i+4f0NuIb8AvqPMj3iXFHkMwg==}
     peerDependencies:
       react: ^16.6.0 || ^17.0.0 || ^18.0.0
+
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
+    peerDependencies:
+      react: '*'
 
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
@@ -6998,6 +7007,10 @@ snapshots:
       react: 19.1.1
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
+
+  react-icons@5.5.0(react@19.1.1):
+    dependencies:
+      react: 19.1.1
 
   react-is@18.3.1: {}
 

@@ -22,6 +22,7 @@ import StringAnalyzerTool from './pages/tools/StringAnalyzer';
 import StringCaseConverterTool from './pages/tools/StringCaseConverter';
 import XmlFormatterTool from './pages/tools/XmlFormatter';
 import ColorConverterTool from './pages/tools/ColorConverter';
+import TextDiffTool from './pages/tools/TextDiffPage';
 import 'antd/dist/reset.css';
 
 const { Content, Sider } = Layout;
@@ -142,6 +143,10 @@ const AppContent: React.FC = () => {
                 <Route
                   path="/tools/color-converter"
                   element={<ColorConverterTool />}
+                />
+                <Route
+                  path="/tools/text-diff"
+                  element={<TextDiffTool />}
                 />
                 <Route path="*" element={<div>Page not found</div>} />
               </Routes>
