@@ -8,6 +8,14 @@ export interface DiffLine {
   content: string;
   originalLineNumber?: number;
   newLineNumber?: number;
+  inlineChanges?: InlineChange[];
+}
+
+export interface InlineChange {
+  type: 'added' | 'removed' | 'unchanged';
+  text: string;
+  startIndex: number;
+  endIndex: number;
 }
 
 export interface DiffResult {
@@ -63,8 +71,87 @@ function calculateSimilarity(text1: string, text2: string): number {
 }
 
 /**
- * Finds the longest common subsequence between two arrays
+ * Computes inline word differences between two lines
  */
+function computeInlineWordDiff(oldLine: string, newLine: string): { oldChanges: InlineChange[]; newChanges: InlineChange[]; } {
+  const oldWords = oldLine.split(/(\s+)/);
+  const newWords = newLine.split(/(\s+)/);
+  
+  const lcs = longestCommonSubsequence(oldWords, newWords);
+  
+  const oldChanges: InlineChange[] = [];
+  const newChanges: InlineChange[] = [];
+  
+  let oldCharIndex = 0;
+  let newCharIndex = 0;
+  
+  let i = oldWords.length;
+  let j = newWords.length;
+  
+  // Backtrack through LCS to build inline changes
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && oldWords[i - 1] === newWords[j - 1]) {
+      // Words are the same
+      const word = oldWords[i - 1];
+      oldChanges.unshift({
+        type: 'unchanged',
+        text: word,
+        startIndex: oldCharIndex - word.length,
+        endIndex: oldCharIndex
+      });
+      newChanges.unshift({
+        type: 'unchanged', 
+        text: word,
+        startIndex: newCharIndex - word.length,
+        endIndex: newCharIndex
+      });
+      
+      oldCharIndex -= word.length;
+      newCharIndex -= word.length;
+      i--;
+      j--;
+    } else if (j > 0 && (i === 0 || lcs[i][j - 1] >= lcs[i - 1][j])) {
+      // Word was added
+      const word = newWords[j - 1];
+      newChanges.unshift({
+        type: 'added',
+        text: word,
+        startIndex: newCharIndex - word.length,
+        endIndex: newCharIndex
+      });
+      newCharIndex -= word.length;
+      j--;
+    } else if (i > 0 && (j === 0 || lcs[i][j - 1] < lcs[i - 1][j])) {
+      // Word was removed
+      const word = oldWords[i - 1];
+      oldChanges.unshift({
+        type: 'removed',
+        text: word,
+        startIndex: oldCharIndex - word.length,
+        endIndex: oldCharIndex
+      });
+      oldCharIndex -= word.length;
+      i--;
+    }
+  }
+  
+  // Rebuild indices from start
+  oldCharIndex = 0;
+  oldChanges.forEach(change => {
+    change.startIndex = oldCharIndex;
+    change.endIndex = oldCharIndex + change.text.length;
+    oldCharIndex += change.text.length;
+  });
+  
+  newCharIndex = 0;
+  newChanges.forEach(change => {
+    change.startIndex = newCharIndex;
+    change.endIndex = newCharIndex + change.text.length;
+    newCharIndex += change.text.length;
+  });
+  
+  return { oldChanges, newChanges };
+}
 function longestCommonSubsequence<T>(arr1: T[], arr2: T[]): number[][] {
   const m = arr1.length;
   const n = arr2.length;
@@ -297,6 +384,51 @@ export function diffText(text1: string, text2: string, mode: DiffMode = 'line'):
     default:
       throw new Error(`Unsupported diff mode: ${mode}`);
   }
+}
+
+/**
+ * Enhanced line diffing with inline word/character highlighting
+ */
+export function diffLinesWithInlineChanges(text1: string, text2: string): DiffLine[] {
+  const diffResult = diffLines(text1, text2);
+  const lines = diffResult.lines;
+  
+  return lines.map((line: DiffLine) => {
+    // For modified lines, compute inline changes
+    if (line.type === 'removed' || line.type === 'added') {
+      // Find the corresponding line in the other text to compare
+      const otherLines = lines.filter((l: DiffLine) => l.type === (line.type === 'removed' ? 'added' : 'removed'));
+      
+      if (otherLines.length > 0) {
+        // Find the most similar line to compute inline diff
+        let bestMatch = otherLines[0];
+        let bestSimilarity = 0;
+        
+        for (const otherLine of otherLines) {
+          const similarity = calculateSimilarity(line.content, otherLine.content);
+          if (similarity > bestSimilarity) {
+            bestSimilarity = similarity;
+            bestMatch = otherLine;
+          }
+        }
+        
+        // If similarity is high enough, compute inline changes
+        if (bestSimilarity > 0.3) {
+          const inlineChanges = computeInlineWordDiff(
+            line.type === 'removed' ? line.content : bestMatch.content,
+            line.type === 'removed' ? bestMatch.content : line.content
+          );
+          
+          return {
+            ...line,
+            inlineChanges: line.type === 'removed' ? inlineChanges.oldChanges : inlineChanges.newChanges
+          };
+        }
+      }
+    }
+    
+    return line;
+  });
 }
 
 /**

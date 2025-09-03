@@ -104,9 +104,11 @@ export {
   diffLines,
   diffWords,
   diffCharacters,
+  diffLinesWithInlineChanges,
   createUnifiedDiff,
   createSideBySideDiff,
   type DiffResult,
   type DiffLine,
   type DiffMode,
+  type InlineChange,
 } from './diff.js';

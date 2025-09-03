@@ -1,51 +1,40 @@
 import React, { useState } from 'react';
-import { Card, Input, Row, Col, Typography, Select, Space, Button, Divider, Badge, Tooltip } from 'antd';
+import { Card, Input, Row, Col, Typography, Space, Button, Divider, Badge, Tooltip } from 'antd';
 import { Helmet } from 'react-helmet-async';
 import { CopyOutlined, FileTextOutlined, HistoryOutlined } from '@ant-design/icons';
 import { 
-  diffText, 
+  diffLinesWithInlineChanges, 
   createUnifiedDiff,
-  type DiffMode,
-  type DiffResult 
+  type DiffLine
 } from '@devtools/core';
 import ToolPageWrapper from '../../components/ToolPageWrapper';
 
 const { Title } = Typography;
 const { TextArea } = Input;
-const { Option } = Select;
 
 const TextDiffTool: React.FC = () => {
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
-  const [diffMode, setDiffMode] = useState<DiffMode>('line');
-  const [diffResult, setDiffResult] = useState<DiffResult | null>(null);
+  const [diffLines, setDiffLines] = useState<DiffLine[]>([]);
   const [unifiedDiff, setUnifiedDiff] = useState<string>('');
 
-  const handleTextChange = () => {
+  React.useEffect(() => {
     if (text1 || text2) {
       try {
-        const result = diffText(text1, text2, diffMode);
-        setDiffResult(result);
+        const result = diffLinesWithInlineChanges(text1, text2);
+        setDiffLines(result);
         
-        if (diffMode === 'line') {
-          const unified = createUnifiedDiff(text1, text2, 'Original', 'Modified');
-          setUnifiedDiff(unified);
-        } else {
-          setUnifiedDiff('');
-        }
-      } catch (error) {
-        setDiffResult(null);
+        const unified = createUnifiedDiff(text1, text2, 'Original', 'Modified');
+        setUnifiedDiff(unified);
+      } catch {
+        setDiffLines([]);
         setUnifiedDiff('');
       }
     } else {
-      setDiffResult(null);
+      setDiffLines([]);
       setUnifiedDiff('');
     }
-  };
-
-  React.useEffect(() => {
-    handleTextChange();
-  }, [text1, text2, diffMode]);
+  }, [text1, text2]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -54,8 +43,91 @@ const TextDiffTool: React.FC = () => {
   const clearAll = () => {
     setText1('');
     setText2('');
-    setDiffResult(null);
+    setDiffLines([]);
     setUnifiedDiff('');
+  };
+
+  // Helper function to compute stats from diff lines
+  const computeStats = (lines: DiffLine[]) => {
+    const stats = {
+      added: 0,
+      removed: 0,
+      modified: 0,
+      unchanged: 0,
+      totalLines: lines.length
+    };
+
+    lines.forEach(line => {
+      switch (line.type) {
+        case 'added':
+          stats.added++;
+          break;
+        case 'removed':
+          stats.removed++;
+          break;
+        case 'unchanged':
+          stats.unchanged++;
+          break;
+      }
+    });
+
+    // Calculate similarity percentage
+    const similarity = stats.totalLines > 0 
+      ? Math.round((stats.unchanged / stats.totalLines) * 100)
+      : 100;
+
+    return { ...stats, similarity };
+  };
+
+  // Helper function to render a line with inline highlighting
+  const renderLineWithInlineChanges = (line: DiffLine) => {
+    if (!line.inlineChanges || line.inlineChanges.length === 0) {
+      return <span>{line.content}</span>;
+    }
+
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+
+    line.inlineChanges.forEach((change, index) => {
+      // Add text before this change
+      if (change.startIndex > lastIndex) {
+        parts.push(
+          <span key={`text-${index}`}>
+            {line.content.slice(lastIndex, change.startIndex)}
+          </span>
+        );
+      }
+
+      // Add the highlighted change
+      const changeText = line.content.slice(change.startIndex, change.endIndex);
+      const highlightColor = change.type === 'added' ? '#b7eb8f' : '#ffccc7'; // Light green/red
+      parts.push(
+        <span
+          key={`change-${index}`}
+          style={{
+            backgroundColor: highlightColor,
+            padding: '1px 2px',
+            borderRadius: '2px',
+            fontWeight: 'bold'
+          }}
+        >
+          {changeText}
+        </span>
+      );
+
+      lastIndex = change.endIndex;
+    });
+
+    // Add remaining text after last change
+    if (lastIndex < line.content.length) {
+      parts.push(
+        <span key="text-end">
+          {line.content.slice(lastIndex)}
+        </span>
+      );
+    }
+
+    return <span>{parts}</span>;
   };
 
   const getTypeColor = (type: string) => {
@@ -64,17 +136,7 @@ const TextDiffTool: React.FC = () => {
       case 'removed': return '#ff4d4f'; // Ant Design red
       case 'modified': return '#1890ff'; // Ant Design blue
       case 'unchanged': return '#8c8c8c'; // Ant Design gray
-      default: return '#8c8c8c';
-    }
-  };
-
-  const getTypeBgColor = (type: string) => {
-    switch (type) {
-      case 'added': return '#f6ffed';    // Light green background
-      case 'removed': return '#fff2f0';  // Light red background
-      case 'modified': return '#e6f7ff'; // Light blue background
-      case 'unchanged': return 'transparent';
-      default: return 'transparent';
+      default: return '#000000';
     }
   };
 
@@ -88,106 +150,132 @@ const TextDiffTool: React.FC = () => {
     }
   };
 
+  const getLineBackgroundColor = (type: string) => {
+    switch (type) {
+      case 'added': return '#f6ffed';    // Very light green
+      case 'removed': return '#fff2f0';  // Very light red
+      case 'modified': return '#e6f7ff'; // Very light blue
+      case 'unchanged': return '#fafafa'; // Very light gray
+      default: return '#ffffff';
+    }
+  };
+
+  const stats = diffLines.length > 0 ? computeStats(diffLines) : null;
+
   return (
     <ToolPageWrapper>
       <Helmet>
-        <title>Text Diff Tool - Devtools</title>
-        <meta 
-          name="description" 
-          content="Compare two text files and visualize differences with line-by-line, word-by-word, or character-by-character comparison modes." 
-        />
+        <title>Text Diff Tool - DevTools</title>
+        <meta name="description" content="Compare and visualize differences between two text blocks with inline highlighting" />
       </Helmet>
 
-      <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }}>
-        <Title level={2}>Text Diff Tool</Title>
-        <p>Compare two texts and visualize differences with various comparison modes.</p>
-
-        {/* Controls */}
-        <Card size="small" style={{ marginBottom: '16px' }}>
-          <Space>
-            <span>Comparison Mode:</span>
-            <Select 
-              value={diffMode} 
-              onChange={setDiffMode}
-              style={{ width: 120 }}
-            >
-              <Option value="line">Line</Option>
-              <Option value="word">Word</Option>
-              <Option value="character">Character</Option>
-            </Select>
-            <Button onClick={clearAll} size="small">Clear All</Button>
-          </Space>
-        </Card>
+      <div style={{ padding: '20px' }}>
+        <Title level={2}>
+          <FileTextOutlined style={{ marginRight: '8px' }} />
+          Text Diff Tool
+        </Title>
 
         {/* Input Areas */}
-        <Row gutter={16} style={{ marginBottom: '16px' }}>
+        <Row gutter={16} style={{ marginBottom: '20px' }}>
           <Col xs={24} lg={12}>
             <Card 
-              title={
-                <Space>
-                  <FileTextOutlined />
-                  Original Text
-                </Space>
-              } 
+              title="Original Text" 
               size="small"
               extra={
-                text1 && (
-                  <Tooltip title="Copy to clipboard">
+                <Space>
+                  <Tooltip title="Paste from clipboard">
                     <Button 
                       type="text" 
                       icon={<CopyOutlined />} 
                       size="small"
-                      onClick={() => copyToClipboard(text1)}
+                      onClick={async () => {
+                        try {
+                          const text = await navigator.clipboard.readText();
+                          setText1(text);
+                        } catch (err) {
+                          console.error('Failed to read clipboard:', err);
+                        }
+                      }}
                     />
                   </Tooltip>
-                )
+                </Space>
               }
             >
               <TextArea
                 value={text1}
                 onChange={(e) => setText1(e.target.value)}
-                placeholder="Enter original text..."
+                placeholder="Enter the original text here..."
                 rows={12}
-                style={{ fontFamily: 'monospace', fontSize: '13px' }}
+                style={{ fontFamily: 'Monaco, "Courier New", monospace' }}
               />
             </Card>
           </Col>
-
           <Col xs={24} lg={12}>
             <Card 
-              title={
-                <Space>
-                  <FileTextOutlined />
-                  Modified Text
-                </Space>
-              } 
+              title="Modified Text" 
               size="small"
               extra={
-                text2 && (
-                  <Tooltip title="Copy to clipboard">
+                <Space>
+                  <Tooltip title="Paste from clipboard">
                     <Button 
                       type="text" 
                       icon={<CopyOutlined />} 
                       size="small"
-                      onClick={() => copyToClipboard(text2)}
+                      onClick={async () => {
+                        try {
+                          const text = await navigator.clipboard.readText();
+                          setText2(text);
+                        } catch (err) {
+                          console.error('Failed to read clipboard:', err);
+                        }
+                      }}
                     />
                   </Tooltip>
-                )
+                </Space>
               }
             >
               <TextArea
                 value={text2}
                 onChange={(e) => setText2(e.target.value)}
-                placeholder="Enter modified text..."
+                placeholder="Enter the modified text here..."
                 rows={12}
-                style={{ fontFamily: 'monospace', fontSize: '13px' }}
+                style={{ fontFamily: 'Monaco, "Courier New", monospace' }}
               />
             </Card>
           </Col>
         </Row>
 
+        {/* Action Buttons */}
+        <Row style={{ marginBottom: '20px' }}>
+          <Col span={24}>
+            <Space>
+              <Button 
+                type="primary" 
+                onClick={() => {
+                  setText1(
+`Hello World
+This is line 2
+This is line 3`
+                  );
+                  setText2(
+`Hello Universe
+This is line 2 modified
+This is line 3
+This is line 4`
+                  );
+                }}
+              >
+                Load Example
+              </Button>
+              <Button onClick={clearAll}>
+                Clear All
+              </Button>
+            </Space>
+          </Col>
+        </Row>
+
         {/* Results */}
-        {diffResult && (
+        {diffLines.length > 0 && stats && (
           <Row gutter={16}>
             {/* Statistics */}
             <Col xs={24} lg={8}>
@@ -196,10 +284,10 @@ const TextDiffTool: React.FC = () => {
                   <div>
                     <strong>Similarity:</strong> 
                     <Badge 
-                      count={`${diffResult.similarity}%`} 
+                      count={`${stats.similarity}%`} 
                       style={{ 
-                        backgroundColor: diffResult.similarity > 70 ? '#52c41a' : 
-                                        diffResult.similarity > 40 ? '#fadb14' : '#ff4d4f',
+                        backgroundColor: stats.similarity > 70 ? '#52c41a' : 
+                                        stats.similarity > 40 ? '#fadb14' : '#ff4d4f',
                         marginLeft: '8px'
                       }} 
                     />
@@ -208,22 +296,22 @@ const TextDiffTool: React.FC = () => {
                   <Divider style={{ margin: '8px 0' }} />
                   
                   <div style={{ color: getTypeColor('added'), fontWeight: '500' }}>
-                    <strong>Added:</strong> {diffResult.stats.added}
+                    <strong>Added:</strong> {stats.added}
                   </div>
                   <div style={{ color: getTypeColor('removed'), fontWeight: '500' }}>
-                    <strong>Removed:</strong> {diffResult.stats.removed}
+                    <strong>Removed:</strong> {stats.removed}
                   </div>
                   <div style={{ color: getTypeColor('modified'), fontWeight: '500' }}>
-                    <strong>Modified:</strong> {diffResult.stats.modified}
+                    <strong>Modified:</strong> {stats.modified}
                   </div>
                   <div style={{ color: getTypeColor('unchanged'), fontWeight: '500' }}>
-                    <strong>Unchanged:</strong> {diffResult.stats.unchanged}
+                    <strong>Unchanged:</strong> {stats.unchanged}
                   </div>
                   
                   <Divider style={{ margin: '8px 0' }} />
                   
                   <div>
-                    <strong>Total Items:</strong> {diffResult.stats.totalLines}
+                    <strong>Total Items:</strong> {stats.totalLines}
                   </div>
                 </Space>
               </Card>
@@ -235,20 +323,20 @@ const TextDiffTool: React.FC = () => {
                 title={
                   <Space>
                     <HistoryOutlined />
-                    Diff View ({diffMode} mode)
+                    Diff View (line mode with inline highlighting)
                   </Space>
                 }
                 size="small"
                 extra={
-                  diffResult.lines.length > 0 && (
+                  diffLines.length > 0 && (
                     <Tooltip title="Copy diff to clipboard">
                       <Button 
                         type="text" 
                         icon={<CopyOutlined />} 
                         size="small"
                         onClick={() => {
-                          const diffText = diffResult.lines
-                            .map(line => `${getTypeSymbol(line.type)} ${line.content}`)
+                          const diffText = diffLines
+                            .map((line: DiffLine) => `${getTypeSymbol(line.type)} ${line.content}`)
                             .join('\n');
                           copyToClipboard(diffText);
                         }}
@@ -257,58 +345,46 @@ const TextDiffTool: React.FC = () => {
                   )
                 }
               >
-                <div 
-                  style={{ 
-                    fontFamily: 'monospace',
-                    fontSize: '13px',
-                    maxHeight: '500px',
-                    overflowY: 'auto',
-                    backgroundColor: '#fafafa',
-                    padding: '16px',
-                    border: '1px solid #d9d9d9',
-                    borderRadius: '8px',
-                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)'
-                  }}
-                >
-                  {diffResult.lines.length > 0 ? (
-                    diffResult.lines.map((line, index) => (
-                      <div 
+                <div style={{ 
+                  maxHeight: '400px', 
+                  overflowY: 'auto',
+                  border: '1px solid #f0f0f0',
+                  borderRadius: '6px'
+                }}>
+                  {diffLines.length > 0 ? (
+                    diffLines.map((line: DiffLine, index: number) => (
+                      <div
                         key={index}
                         style={{
                           padding: '4px 8px',
-                          backgroundColor: getTypeBgColor(line.type),
-                          borderLeft: `4px solid ${getTypeColor(line.type)}`,
-                          marginBottom: '2px',
-                          borderRadius: '2px',
-                          transition: 'all 0.2s ease'
+                          backgroundColor: getLineBackgroundColor(line.type),
+                          borderLeft: `3px solid ${getTypeColor(line.type)}`,
+                          fontFamily: 'Monaco, "Courier New", monospace',
+                          fontSize: '13px',
+                          lineHeight: '1.4',
+                          whiteSpace: 'pre-wrap',
+                          borderBottom: '1px solid #f5f5f5'
                         }}
                       >
-                        <span 
-                          style={{ 
-                            color: getTypeColor(line.type), 
-                            marginRight: '12px',
-                            fontWeight: 'bold',
-                            fontSize: '14px'
-                          }}
-                        >
+                        <span style={{ 
+                          color: getTypeColor(line.type), 
+                          marginRight: '8px',
+                          fontWeight: 'bold',
+                          display: 'inline-block',
+                          width: '20px'
+                        }}>
                           {getTypeSymbol(line.type)}
                         </span>
-                        <span style={{ fontFamily: 'inherit' }}>
-                          {line.content || <em style={{ color: '#bfbfbf' }}>(empty line)</em>}
-                        </span>
+                        {renderLineWithInlineChanges(line)}
                       </div>
                     ))
                   ) : (
                     <div style={{ 
-                      color: '#52c41a', 
-                      fontStyle: 'italic',
-                      textAlign: 'center',
-                      padding: '24px',
-                      backgroundColor: '#f6ffed',
-                      border: '1px dashed #52c41a',
-                      borderRadius: '6px'
+                      padding: '20px', 
+                      textAlign: 'center', 
+                      color: '#8c8c8c' 
                     }}>
-                      ✅ No differences found - texts are identical
+                      No differences found
                     </div>
                   )}
                 </div>
@@ -317,67 +393,42 @@ const TextDiffTool: React.FC = () => {
           </Row>
         )}
 
-        {/* Unified Diff (only for line mode) */}
-        {unifiedDiff && diffMode === 'line' && (
-          <Card 
-            title="Unified Diff Format"
-            size="small" 
-            style={{ marginTop: '16px' }}
-            extra={
-              <Tooltip title="Copy unified diff to clipboard">
-                <Button 
-                  type="text" 
-                  icon={<CopyOutlined />} 
-                  size="small"
-                  onClick={() => copyToClipboard(unifiedDiff)}
-                />
-              </Tooltip>
-            }
-          >
-            <div 
-              style={{ 
-                fontFamily: 'monospace',
-                fontSize: '13px',
-                backgroundColor: '#fafafa',
-                padding: '16px',
-                border: '1px solid #d9d9d9',
-                borderRadius: '8px',
-                whiteSpace: 'pre-wrap',
-                maxHeight: '400px',
-                overflowY: 'auto',
-                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
-                lineHeight: '1.5'
-              }}
-            >
-              {unifiedDiff}
-            </div>
-          </Card>
+        {/* Unified Diff */}
+        {unifiedDiff && (
+          <Row style={{ marginTop: '16px' }}>
+            <Col span={24}>
+              <Card 
+                title="Unified Diff" 
+                size="small"
+                extra={
+                  <Tooltip title="Copy unified diff to clipboard">
+                    <Button 
+                      type="text" 
+                      icon={<CopyOutlined />} 
+                      size="small"
+                      onClick={() => copyToClipboard(unifiedDiff)}
+                    />
+                  </Tooltip>
+                }
+              >
+                <pre style={{ 
+                  whiteSpace: 'pre-wrap',
+                  fontFamily: 'Monaco, "Courier New", monospace',
+                  fontSize: '13px',
+                  margin: 0,
+                  padding: '12px',
+                  backgroundColor: '#fafafa',
+                  border: '1px solid #f0f0f0',
+                  borderRadius: '4px',
+                  maxHeight: '300px',
+                  overflowY: 'auto'
+                }}>
+                  {unifiedDiff}
+                </pre>
+              </Card>
+            </Col>
+          </Row>
         )}
-
-        {/* Usage Examples */}
-        <Card title="Usage Examples" size="small" style={{ marginTop: '24px' }}>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <div>
-              <strong>Use cases:</strong>
-              <ul>
-                <li><strong>Code Review:</strong> Compare different versions of code files</li>
-                <li><strong>Document Editing:</strong> Track changes in text documents</li>
-                <li><strong>Configuration Changes:</strong> Compare configuration files</li>
-                <li><strong>Data Migration:</strong> Verify data transformations</li>
-                <li><strong>Content Management:</strong> Review content changes before publishing</li>
-              </ul>
-            </div>
-            
-            <div>
-              <strong>Comparison Modes:</strong>
-              <ul>
-                <li><strong>Line Mode:</strong> Compare text line by line (best for code and structured text)</li>
-                <li><strong>Word Mode:</strong> Compare word by word (good for prose and documentation)</li>
-                <li><strong>Character Mode:</strong> Compare character by character (precise but verbose)</li>
-              </ul>
-            </div>
-          </Space>
-        </Card>
       </div>
     </ToolPageWrapper>
   );

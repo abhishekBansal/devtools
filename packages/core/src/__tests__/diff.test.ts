@@ -4,6 +4,7 @@ import {
   diffLines, 
   diffWords, 
   diffCharacters,
+  diffLinesWithInlineChanges,
   createUnifiedDiff,
   createSideBySideDiff,
   type DiffMode 
@@ -333,6 +334,66 @@ describe('Text Diff Utilities', () => {
       
       expect(result.stats.added).toBe(1);
       expect(result.stats.unchanged).toBe(8); // 'H', 'e', 'l', 'l', 'o', ' ', '世', '界'
+    });
+  });
+
+  describe('diffLinesWithInlineChanges', () => {
+    it('should detect inline word changes', () => {
+      const text1 = 'Hello world\nThis is line 2';
+      const text2 = 'Hello universe\nThis is line 2';
+      const result = diffLinesWithInlineChanges(text1, text2);
+      
+      expect(result).toHaveLength(3);
+      expect(result[0].type).toBe('removed');
+      expect(result[0].content).toBe('Hello world');
+      expect(result[1].type).toBe('added');
+      expect(result[1].content).toBe('Hello universe');
+      expect(result[2].type).toBe('unchanged');
+      expect(result[2].content).toBe('This is line 2');
+    });
+
+    it('should provide inline changes for similar lines', () => {
+      const text1 = 'function getName() { return "John"; }';
+      const text2 = 'function getName() { return "Jane"; }';
+      const result = diffLinesWithInlineChanges(text1, text2);
+      
+      expect(result).toHaveLength(2);
+      expect(result[0].type).toBe('removed');
+      expect(result[1].type).toBe('added');
+      
+      // Both lines should have inline changes since they are similar
+      expect(result[0].inlineChanges).toBeDefined();
+      expect(result[1].inlineChanges).toBeDefined();
+    });
+
+    it('should handle identical texts', () => {
+      const text = 'Hello world\nSecond line';
+      const result = diffLinesWithInlineChanges(text, text);
+      
+      expect(result).toHaveLength(2);
+      expect(result[0].type).toBe('unchanged');
+      expect(result[1].type).toBe('unchanged');
+      expect(result[0].inlineChanges).toBeUndefined();
+      expect(result[1].inlineChanges).toBeUndefined();
+    });
+
+    it('should handle empty texts', () => {
+      const result = diffLinesWithInlineChanges('', '');
+      expect(result).toHaveLength(0);
+    });
+
+    it('should handle very different lines', () => {
+      const text1 = 'completely different text';
+      const text2 = 'xyz123';
+      const result = diffLinesWithInlineChanges(text1, text2);
+      
+      expect(result).toHaveLength(2);
+      expect(result[0].type).toBe('removed');
+      expect(result[1].type).toBe('added');
+      
+      // The function should run without errors and return valid result
+      expect(result[0].content).toBe('completely different text');
+      expect(result[1].content).toBe('xyz123');
     });
   });
 });
