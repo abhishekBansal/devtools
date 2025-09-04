@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { trackThemeToggle } from '../utils/analytics';
 
 interface ThemeContextType {
   isDark: boolean;
@@ -34,7 +35,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, [isDark]);
 
   const toggleTheme = () => {
-    setIsDark(prev => !prev);
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    // Track theme toggle event
+    trackThemeToggle(newTheme ? 'dark' : 'light');
   };
 
   return (

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, Input, Radio, Button, Space, Typography, message, Row, Col } from 'antd';
 import { CopyOutlined, ClearOutlined } from '@ant-design/icons';
 import { Helmet } from 'react-helmet-async';
 import { encodeBase64, decodeBase64 } from '@devtools/core';
 import { ToolPageWrapper } from '../../components/ToolPageWrapper';
+import { trackToolUsage, trackToolAction, trackCopy, trackClear } from '../../utils/analytics';
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -15,7 +16,12 @@ export const Base64Page: React.FC = () => {
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<Mode>('encode');
 
-  const handleConvert = () => {
+  // Track tool usage on component mount
+  React.useEffect(() => {
+    trackToolUsage('Base64', 'page_view');
+  }, []);
+
+  const handleConvert = useCallback(() => {
     if (!input.trim()) {
       setOutput('');
       return;
@@ -26,12 +32,15 @@ export const Base64Page: React.FC = () => {
         ? encodeBase64(input) 
         : decodeBase64(input);
       setOutput(result);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Conversion failed';
+      
+      // Track conversion action
+      trackToolAction('Base64', mode === 'encode' ? 'encode' : 'decode');
+    } catch {
+      const errorMessage = 'Conversion failed';
       message.error(errorMessage);
       setOutput('');
     }
-  };
+  }, [input, mode]);
 
   const handleCopy = async () => {
     if (!output) return;
@@ -39,7 +48,10 @@ export const Base64Page: React.FC = () => {
     try {
       await navigator.clipboard.writeText(output);
       message.success('Copied to clipboard!');
-    } catch (error) {
+      
+      // Track copy action
+      trackCopy('Base64');
+    } catch {
       message.error('Failed to copy to clipboard');
     }
   };
@@ -47,13 +59,16 @@ export const Base64Page: React.FC = () => {
   const handleClear = () => {
     setInput('');
     setOutput('');
+    
+    // Track clear action
+    trackClear('Base64');
   };
 
   // Auto-convert on input change
   React.useEffect(() => {
     const timer = setTimeout(handleConvert, 300);
     return () => clearTimeout(timer);
-  }, [input, mode]);
+  }, [input, mode, handleConvert]);
 
   return (
     <ToolPageWrapper>

@@ -126,13 +126,13 @@ node packages/cli/bin/devtools --help
 
 ### Web App
 
-```bash
-# Build web application
-cd apps/web
-npm run build
+The web application automatically deploys to GitHub Pages when changes are pushed to the master branch.
 
-# Deploy to GitHub Pages
-npm run deploy
+```bash
+# Manual build and deploy
+cd apps/web
+pnpm run build
+pnpm run deploy
 ```
 
 ### CLI Package

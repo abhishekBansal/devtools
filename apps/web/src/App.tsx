@@ -8,6 +8,8 @@ import {
 import { Layout, ConfigProvider, theme, Drawer } from 'antd';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { initializeAnalytics } from './utils/analytics';
+import { usePageTracking } from './hooks/usePageTracking';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import SideNav from './components/SideNav';
@@ -32,6 +34,14 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   const isToolPage = location.pathname.startsWith('/tools/');
   const [drawerVisible, setDrawerVisible] = useState(false);
+
+  // Initialize analytics and track page views
+  usePageTracking();
+
+  React.useEffect(() => {
+    // Initialize Google Analytics
+    initializeAnalytics();
+  }, []);
 
   React.useEffect(() => {
     if (isDark) {
