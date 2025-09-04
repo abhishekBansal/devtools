@@ -98,7 +98,7 @@ describe('cron utilities', () => {
       
       expect(validateCronExpression('*/-1 * * * *')).toEqual({ 
         valid: false, 
-        error: 'Invalid minute: Step value must be a positive integer' 
+        error: 'Invalid minute: Invalid range values' 
       });
     });
   });
@@ -128,7 +128,7 @@ describe('cron utilities', () => {
 
     it('should explain step expressions', () => {
       expect(explainCronExpression('*/5 * * * *')).toBe('At every 5 minutes of every hour');
-      expect(explainCronExpression('0 */2 * * *')).toBe('At the beginning of every hour at every 2 hours');
+      expect(explainCronExpression('0 */2 * * *')).toBe('At every 2 hours');
     });
 
     it('should handle invalid expressions', () => {

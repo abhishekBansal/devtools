@@ -92,11 +92,8 @@ export type CaseType =
  */
 export function toCamelCase(text: string): string {
   return text
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-      return index === 0 ? word.toLowerCase() : word.toUpperCase();
-    })
-    .replace(/\s+/g, '')
-    .replace(/[-_]/g, '');
+    .replace(/[-_\s]+(.)?/g, (_, char) => char ? char.toUpperCase() : '')
+    .replace(/^(.)/, (char) => char.toLowerCase());
 }
 
 /**
@@ -104,11 +101,8 @@ export function toCamelCase(text: string): string {
  */
 export function toPascalCase(text: string): string {
   return text
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word) => {
-      return word.toUpperCase();
-    })
-    .replace(/\s+/g, '')
-    .replace(/[-_]/g, '');
+    .replace(/[-_\s]+(.)?/g, (_, char) => char ? char.toUpperCase() : '')
+    .replace(/^(.)/, (char) => char.toUpperCase());
 }
 
 /**
@@ -129,12 +123,11 @@ export function toSnakeCase(text: string): string {
  */
 export function toKebabCase(text: string): string {
   return text
-    .replace(/\W+/g, ' ')
-    .split(/ |\B(?=[A-Z])/)
-    .map(word => word.toLowerCase())
-    .join('-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/[\s_]+/g, '-')  // Replace spaces and underscores with hyphens
+    .replace(/([a-z])([A-Z])/g, '$1-$2')  // Add hyphens before uppercase letters
+    .toLowerCase()
+    .replace(/-+/g, '-')  // Collapse multiple hyphens
+    .replace(/^-|-$/g, '');  // Remove leading/trailing hyphens
 }
 
 /**

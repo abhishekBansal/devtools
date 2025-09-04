@@ -19,8 +19,9 @@ export function validateXml(xmlString: string): XmlValidationResult {
 
   try {
     // Check if we're in a browser environment
-    if (typeof DOMParser !== 'undefined') {
+    if (typeof globalThis !== 'undefined' && 'DOMParser' in globalThis) {
       // Browser environment - use DOMParser
+      const DOMParser = (globalThis as any).DOMParser;
       const parser = new DOMParser();
       const doc = parser.parseFromString(xmlString.trim(), 'text/xml');
       
@@ -190,8 +191,9 @@ export function analyzeXml(xmlString: string): {
 
   try {
     // Check if we're in a browser environment
-    if (typeof DOMParser !== 'undefined') {
+    if (typeof globalThis !== 'undefined' && 'DOMParser' in globalThis) {
       // Browser environment - use DOMParser for detailed analysis
+      const DOMParser = (globalThis as any).DOMParser;
       const parser = new DOMParser();
       const doc = parser.parseFromString(xmlString, 'text/xml');
       
@@ -201,21 +203,22 @@ export function analyzeXml(xmlString: string): {
       let comments = 0;
       let maxDepth = 0;
 
-      function traverse(node: Node, depth: number = 0): void {
+      function traverse(node: any, depth: number = 0): void {
         maxDepth = Math.max(maxDepth, depth);
         
-        if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.nodeType === 1) { // ELEMENT_NODE
           elements++;
-          const element = node as Element;
-          attributes += element.attributes.length;
-        } else if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+          attributes += node.attributes?.length || 0;
+        } else if (node.nodeType === 3 && node.textContent?.trim()) { // TEXT_NODE
           textNodes++;
-        } else if (node.nodeType === Node.COMMENT_NODE) {
+        } else if (node.nodeType === 8) { // COMMENT_NODE
           comments++;
         }
         
-        for (let i = 0; i < node.childNodes.length; i++) {
-          traverse(node.childNodes[i], depth + 1);
+        if (node.childNodes) {
+          for (let i = 0; i < node.childNodes.length; i++) {
+            traverse(node.childNodes[i], depth + 1);
+          }
         }
       }
       

@@ -62,7 +62,7 @@ export function validateHexColor(hex: string): string {
 
   // Expand 3-digit hex to 6-digit
   if (cleanHex.length === 3) {
-    return '#' + cleanHex.split('').map(char => char + char).join('');
+    return '#' + cleanHex.split('').map(char => char + char).join('').toUpperCase();
   }
 
   return '#' + cleanHex.toUpperCase();

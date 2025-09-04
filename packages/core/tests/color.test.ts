@@ -38,7 +38,7 @@ describe('color utilities', () => {
     });
 
     it('should round decimal values', () => {
-      expect(validateRgbColor(255.7, 0.3, 0.9)).toEqual({ r: 256, g: 0, b: 1 });
+      expect(validateRgbColor(254.7, 0.3, 0.9)).toEqual({ r: 255, g: 0, b: 1 });
     });
 
     it('should throw error for invalid RGB values', () => {

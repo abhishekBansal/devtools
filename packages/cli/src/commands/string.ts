@@ -1,15 +1,13 @@
 import { Command } from 'commander';
 import { 
   analyzeString, 
-  convertCase,
   toCamelCase,
   toPascalCase,
   toSnakeCase,
   toKebabCase,
   toConstantCase,
   toTitleCase,
-  toSentenceCase,
-  type StringAnalysis 
+  toSentenceCase
 } from '@devtools/core';
 
 export function stringCommand(): Command {

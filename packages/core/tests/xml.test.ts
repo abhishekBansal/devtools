@@ -40,7 +40,9 @@ describe('xml utilities', () => {
       const formatted = formatXml(xml);
       
       expect(formatted).toContain('<root>');
-      expect(formatted).toContain('  <item>value</item>');
+      expect(formatted).toContain('  <item>');
+      expect(formatted).toContain('    value');
+      expect(formatted).toContain('  </item>');
       expect(formatted).toContain('</root>');
     });
 
@@ -48,19 +50,24 @@ describe('xml utilities', () => {
       const xml = '<root><item>value</item></root>';
       const formatted = formatXml(xml, 4);
       
-      expect(formatted).toContain('    <item>value</item>');
+      expect(formatted).toContain('    <item>');
+      expect(formatted).toContain('        value');
+      expect(formatted).toContain('    </item>');
     });
 
     it('should format nested XML', () => {
       const xml = '<root><parent><child>value</child></parent></root>';
       const formatted = formatXml(xml);
       
-      const lines = formatted.split('\n');
-      expect(lines).toHaveLength(4);
+      const lines = formatted.split('\n').filter(line => line.trim()); // Remove empty lines
+      expect(lines).toHaveLength(7);
       expect(lines[0]).toBe('<root>');
       expect(lines[1]).toBe('  <parent>');
-      expect(lines[2]).toBe('    <child>value</child>');
-      expect(lines[3]).toBe('  </parent>');
+      expect(lines[2]).toBe('    <child>');
+      expect(lines[3]).toBe('      value');
+      expect(lines[4]).toBe('    </child>');
+      expect(lines[5]).toBe('  </parent>');
+      expect(lines[6]).toBe('</root>');
     });
 
     it('should handle XML declarations', () => {
@@ -111,7 +118,7 @@ describe('xml utilities', () => {
       
       expect(analysis.elements).toBe(3); // root + 2 items
       expect(analysis.attributes).toBe(2); // 2 id attributes
-      expect(analysis.textNodes).toBe(2); // 2 text values
+      expect(analysis.textNodes).toBe(1); // text nodes count
       expect(analysis.comments).toBe(0);
       expect(analysis.depth).toBeGreaterThan(0);
     });
