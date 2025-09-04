@@ -73,6 +73,8 @@ Each tool has comprehensive documentation in the [wiki](wiki/) folder:
 - **Web UI Guide** - Step-by-step usage instructions
 - **CLI Usage** - Command-line examples and options
 
+For version history and release notes, see the [CHANGELOG.md](CHANGELOG.md).
+
 ## 🏗️ Project Structure
 
 ```
