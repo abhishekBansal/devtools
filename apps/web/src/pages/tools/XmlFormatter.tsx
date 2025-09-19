@@ -151,12 +151,12 @@ const XmlFormatterTool: React.FC = () => {
               </Space>
             }
           >
-            <CodeEditorComponent
+                        <CodeEditorComponent
               value={inputXml}
               onChange={handleInputChange}
               language="xml"
               placeholder="Paste your XML here..."
-              rows={10}
+              rows={12}
             />
           </Card>
 
@@ -209,7 +209,7 @@ const XmlFormatterTool: React.FC = () => {
                 value={outputXml}
                 language="xml"
                 readOnly
-                rows={10}
+                rows={12}
                 placeholder={validation?.valid ? 'Processed XML will appear here...' : 'Fix XML errors to see output'}
               />
             </Card>

@@ -43,6 +43,8 @@ export const CodeEditorComponent: React.FC<CodeEditorComponentProps> = ({
     border: `1px solid ${theme.borderColor}`,
     borderRadius: '6px',
     minHeight: `${rows * 1.5}em`,
+    maxHeight: `${Math.max(rows, 8) * 1.5}em`, // Set maximum height
+    overflow: 'auto', // Enable scrollbars when content exceeds maxHeight
     backgroundColor: theme.backgroundColor,
     color: theme.color,
     ...style

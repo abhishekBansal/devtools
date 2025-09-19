@@ -113,7 +113,7 @@ export const JsonPage: React.FC = () => {
                   onChange={setInput}
                   language="json"
                   placeholder='Enter JSON here... e.g., {"name": "example", "value": 123}'
-                  rows={8}
+                  rows={10}
                 />
                 
                 {validationResult && (
@@ -173,7 +173,7 @@ export const JsonPage: React.FC = () => {
                   value={output}
                   language="json"
                   readOnly
-                  rows={8}
+                  rows={10}
                 />
               </Space>
             </div>
