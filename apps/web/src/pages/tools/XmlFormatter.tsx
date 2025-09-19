@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Input, Row, Col, Typography, Space, Button, message, Select, Alert } from 'antd';
+import { Card, Typography, Space, Button, message, Select, Alert } from 'antd';
 import { CopyOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Helmet } from 'react-helmet-async';
 import { validateXml, formatXml, minifyXml, analyzeXml, type XmlValidationResult } from '@devtools/core';
 import ToolPageWrapper from '../../components/ToolPageWrapper';
+import { CodeEditorComponent } from '../../components/CodeEditor';
 
 const { Title } = Typography;
-const { TextArea } = Input;
 
 const XmlFormatterTool: React.FC = () => {
   const [inputXml, setInputXml] = useState('');
@@ -119,134 +119,127 @@ const XmlFormatterTool: React.FC = () => {
         <Title level={2}>XML Formatter</Title>
         <p>Validate, format, and minify XML documents with comprehensive analysis.</p>
 
-        <Row gutter={24}>
-          <Col xs={24} lg={12}>
-            <Card 
-              title="Input XML" 
-              size="small"
-              extra={
-                <Space>
+        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          {/* Input Section */}
+          <Card 
+            title="Input XML" 
+            size="small"
+            extra={
+              <Space>
+                <Select
+                  value={operation}
+                  onChange={handleOperationChange}
+                  style={{ width: 120 }}
+                  options={[
+                    { value: 'format', label: 'Format' },
+                    { value: 'minify', label: 'Minify' },
+                    { value: 'validate', label: 'Validate' }
+                  ]}
+                />
+                {operation === 'format' && (
                   <Select
-                    value={operation}
-                    onChange={handleOperationChange}
-                    style={{ width: 120 }}
+                    value={indentSize}
+                    onChange={handleIndentChange}
+                    style={{ width: 80 }}
                     options={[
-                      { value: 'format', label: 'Format' },
-                      { value: 'minify', label: 'Minify' },
-                      { value: 'validate', label: 'Validate' }
+                      { value: 2, label: '2' },
+                      { value: 4, label: '4' },
+                      { value: 8, label: '8' }
                     ]}
                   />
-                  {operation === 'format' && (
-                    <Select
-                      value={indentSize}
-                      onChange={handleIndentChange}
-                      style={{ width: 80 }}
-                      options={[
-                        { value: 2, label: '2' },
-                        { value: 4, label: '4' },
-                        { value: 8, label: '8' }
-                      ]}
-                    />
-                  )}
-                </Space>
+                )}
+              </Space>
+            }
+          >
+            <CodeEditorComponent
+              value={inputXml}
+              onChange={handleInputChange}
+              language="xml"
+              placeholder="Paste your XML here..."
+              rows={10}
+            />
+          </Card>
+
+          {/* Validation Status */}
+          {validation && (
+            <Card size="small">
+              <Space align="center">
+                {validation.valid ? (
+                  <>
+                    <CheckCircleOutlined style={{ color: '#52c41a' }} />
+                    <span style={{ color: '#52c41a' }}>Valid XML</span>
+                  </>
+                ) : (
+                  <>
+                    <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
+                    <span style={{ color: '#ff4d4f' }}>Invalid XML</span>
+                  </>
+                )}
+              </Space>
+              {!validation.valid && validation.error && (
+                <Alert
+                  message="Validation Error"
+                  description={validation.error}
+                  type="error"
+                  style={{ marginTop: '8px' }}
+                  showIcon
+                />
+              )}
+            </Card>
+          )}
+
+          {/* Output Section */}
+          {operation !== 'validate' && (
+            <Card 
+              title={`${operation === 'format' ? 'Formatted' : 'Minified'} XML`}
+              size="small"
+              extra={
+                outputXml && (
+                  <Button
+                    icon={<CopyOutlined />}
+                    size="small"
+                    onClick={() => copyToClipboard(outputXml)}
+                  >
+                    Copy
+                  </Button>
+                )
               }
             >
-              <TextArea
-                value={inputXml}
-                onChange={(e) => handleInputChange(e.target.value)}
-                placeholder="Paste your XML here..."
-                rows={15}
-                style={{ fontFamily: 'monospace' }}
+              <CodeEditorComponent
+                value={outputXml}
+                language="xml"
+                readOnly
+                rows={10}
+                placeholder={validation?.valid ? 'Processed XML will appear here...' : 'Fix XML errors to see output'}
               />
             </Card>
+          )}
 
-            {validation && (
-              <Card size="small" style={{ marginTop: '16px' }}>
-                <Space align="center">
-                  {validation.valid ? (
-                    <>
-                      <CheckCircleOutlined style={{ color: '#52c41a' }} />
-                      <span style={{ color: '#52c41a' }}>Valid XML</span>
-                    </>
-                  ) : (
-                    <>
-                      <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
-                      <span style={{ color: '#ff4d4f' }}>Invalid XML</span>
-                    </>
-                  )}
-                </Space>
-                {!validation.valid && validation.error && (
-                  <Alert
-                    message="Validation Error"
-                    description={validation.error}
-                    type="error"
-                    style={{ marginTop: '8px' }}
-                    showIcon
-                  />
-                )}
-              </Card>
-            )}
-          </Col>
-
-          <Col xs={24} lg={12}>
-            {operation !== 'validate' && (
-              <Card 
-                title={`${operation === 'format' ? 'Formatted' : 'Minified'} XML`}
-                size="small"
-                extra={
-                  outputXml && (
-                    <Button
-                      icon={<CopyOutlined />}
-                      size="small"
-                      onClick={() => copyToClipboard(outputXml)}
-                    >
-                      Copy
-                    </Button>
-                  )
-                }
-              >
-                <TextArea
-                  value={outputXml}
-                  readOnly
-                  rows={15}
-                  style={{ 
-                    fontFamily: 'monospace',
-                    backgroundColor: '#f5f5f5'
-                  }}
-                  placeholder={validation?.valid ? 'Processed XML will appear here...' : 'Fix XML errors to see output'}
-                />
-              </Card>
-            )}
-
-            {analysis && (
-              <Card title="XML Analysis" size="small" style={{ marginTop: operation === 'validate' ? '0' : '16px' }}>
-                <Space direction="vertical" style={{ width: '100%' }}>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <div><strong>Elements:</strong> {analysis.elements}</div>
-                    </Col>
-                    <Col span={12}>
-                      <div><strong>Attributes:</strong> {analysis.attributes}</div>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <div><strong>Text Nodes:</strong> {analysis.textNodes}</div>
-                    </Col>
-                    <Col span={12}>
-                      <div><strong>Comments:</strong> {analysis.comments}</div>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <div><strong>Max Depth:</strong> {analysis.depth}</div>
-                    </Col>
-                  </Row>
-                </Space>
-              </Card>
-            )}
-          </Col>
-        </Row>
+          {/* Analysis Section */}
+          {analysis && (
+            <Card title="XML Analysis" size="small">
+              <Space direction="vertical" style={{ width: '100%' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                  <div style={{ minWidth: '150px' }}>
+                    <strong>Elements:</strong> {analysis.elements}
+                  </div>
+                  <div style={{ minWidth: '150px' }}>
+                    <strong>Attributes:</strong> {analysis.attributes}
+                  </div>
+                  <div style={{ minWidth: '150px' }}>
+                    <strong>Text Nodes:</strong> {analysis.textNodes}
+                  </div>
+                  <div style={{ minWidth: '150px' }}>
+                    <strong>Comments:</strong> {analysis.comments}
+                  </div>
+                  <div style={{ minWidth: '150px' }}>
+                    <strong>Max Depth:</strong> {analysis.depth}
+                  </div>
+                </div>
+              </Space>
+            </Card>
+          )}
+        </Space>
 
         <Card title="Usage Examples" size="small" style={{ marginTop: '24px' }}>
           <Space direction="vertical" style={{ width: '100%' }}>

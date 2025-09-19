@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Card, Input, Button, Space, Typography, message, Alert, Row, Col } from 'antd';
+import { Card, Button, Space, Typography, message, Alert } from 'antd';
 import { CopyOutlined, ClearOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Helmet } from 'react-helmet-async';
 import { validateJson, formatJson, minifyJson } from '@devtools/core';
 import { ToolPageWrapper } from '../../components/ToolPageWrapper';
+import { CodeEditorComponent } from '../../components/CodeEditor';
 
-const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
 
 export const JsonPage: React.FC = () => {
@@ -15,16 +15,6 @@ export const JsonPage: React.FC = () => {
     isValid: boolean;
     error?: string;
   } | null>(null);
-
-  const handleValidate = () => {
-    if (!input.trim()) {
-      setValidationResult(null);
-      return;
-    }
-
-    const result = validateJson(input);
-    setValidationResult(result);
-  };
 
   const handleFormat = () => {
     if (!input.trim()) {
@@ -64,7 +54,7 @@ export const JsonPage: React.FC = () => {
     try {
       await navigator.clipboard.writeText(output);
       message.success('Copied to clipboard!');
-    } catch (error) {
+    } catch {
       message.error('Failed to copy to clipboard');
     }
   };
@@ -77,7 +67,15 @@ export const JsonPage: React.FC = () => {
 
   // Auto-validate on input change
   React.useEffect(() => {
-    const timer = setTimeout(handleValidate, 300);
+    const timer = setTimeout(() => {
+      if (!input.trim()) {
+        setValidationResult(null);
+        return;
+      }
+
+      const result = validateJson(input);
+      setValidationResult(result);
+    }, 300);
     return () => clearTimeout(timer);
   }, [input]);
 
@@ -106,60 +104,34 @@ export const JsonPage: React.FC = () => {
 
         <Card>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <Row gutter={24}>
-              <Col xs={24} lg={12}>
-                <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                  <Typography.Text strong>JSON Input</Typography.Text>
-                  <TextArea
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder='Enter JSON here... e.g., {"name": "example", "value": 123}'
-                    rows={12}
-                    style={{ fontFamily: 'monospace' }}
+            {/* Input Section */}
+            <div>
+              <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                <Typography.Text strong>JSON Input</Typography.Text>
+                <CodeEditorComponent
+                  value={input}
+                  onChange={setInput}
+                  language="json"
+                  placeholder='Enter JSON here... e.g., {"name": "example", "value": 123}'
+                  rows={8}
+                />
+                
+                {validationResult && (
+                  <Alert
+                    type={validationResult.isValid ? 'success' : 'error'}
+                    icon={validationResult.isValid ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    message={
+                      validationResult.isValid 
+                        ? 'Valid JSON' 
+                        : `Invalid JSON: ${validationResult.error}`
+                    }
+                    showIcon
                   />
-                  
-                  {validationResult && (
-                    <Alert
-                      type={validationResult.isValid ? 'success' : 'error'}
-                      icon={validationResult.isValid ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-                      message={
-                        validationResult.isValid 
-                          ? 'Valid JSON' 
-                          : `Invalid JSON: ${validationResult.error}`
-                      }
-                      showIcon
-                    />
-                  )}
-                </Space>
-              </Col>
+                )}
+              </Space>
+            </div>
 
-              <Col xs={24} lg={12}>
-                <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                  <Space>
-                    <Typography.Text strong>Output</Typography.Text>
-                    <Button
-                      type="link"
-                      size="small"
-                      icon={<CopyOutlined />}
-                      onClick={handleCopy}
-                      disabled={!output}
-                    >
-                      Copy
-                    </Button>
-                  </Space>
-                  <TextArea
-                    value={output}
-                    readOnly
-                    rows={12}
-                    style={{ 
-                      fontFamily: 'monospace',
-                      backgroundColor: '#f5f5f5'
-                    }}
-                  />
-                </Space>
-              </Col>
-            </Row>
-
+            {/* Action Buttons */}
             <Space wrap>
               <Button 
                 type="primary" 
@@ -181,6 +153,30 @@ export const JsonPage: React.FC = () => {
                 Clear
               </Button>
             </Space>
+
+            {/* Output Section */}
+            <div>
+              <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                <Space>
+                  <Typography.Text strong>Output</Typography.Text>
+                  <Button
+                    type="link"
+                    size="small"
+                    icon={<CopyOutlined />}
+                    onClick={handleCopy}
+                    disabled={!output}
+                  >
+                    Copy
+                  </Button>
+                </Space>
+                <CodeEditorComponent
+                  value={output}
+                  language="json"
+                  readOnly
+                  rows={8}
+                />
+              </Space>
+            </div>
           </Space>
         </Card>
 
