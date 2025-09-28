@@ -4,22 +4,22 @@
     <loc>https://tools.abhishekbansal.dev/</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/home</loc>
+    <loc>https://tools.abhishekbansal.dev/tools/base64-encoder-decoder</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/base64</loc>
+    <loc>https://tools.abhishekbansal.dev/tools/json-validator-formatter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/color-converter</loc>
+    <loc>https://tools.abhishekbansal.dev/tools/uuid-generator</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/cron</loc>
+    <loc>https://tools.abhishekbansal.dev/tools/hex-text-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/hex</loc>
+    <loc>https://tools.abhishekbansal.dev/tools/timestamp-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/json</loc>
+    <loc>https://tools.abhishekbansal.dev/tools/cron-expression-parser</loc>
   </url>
   <url>
     <loc>https://tools.abhishekbansal.dev/tools/string-analyzer</loc>
@@ -28,15 +28,12 @@
     <loc>https://tools.abhishekbansal.dev/tools/string-case-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/text-diff</loc>
-  </url>
-  <url>
-    <loc>https://tools.abhishekbansal.dev/tools/timestamp</loc>
-  </url>
-  <url>
-    <loc>https://tools.abhishekbansal.dev/tools/uuid</loc>
-  </url>
-  <url>
     <loc>https://tools.abhishekbansal.dev/tools/xml-formatter</loc>
+  </url>
+  <url>
+    <loc>https://tools.abhishekbansal.dev/tools/color-converter</loc>
+  </url>
+  <url>
+    <loc>https://tools.abhishekbansal.dev/tools/text-diff</loc>
   </url>
 </urlset>

@@ -7,6 +7,15 @@
     <meta name="theme-color" content="#1890ff" />
     <meta name="description" content="A free collection of essential online developer tools. Convert Base64, format JSON, generate UUIDs, analyze strings, and more. Fast, simple, and easy to use. " />
     <title>DevTools - Essential Developer Utilities</title>
+    <script>
+      (function() {
+        const redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
     <style>
       /* Prevent initial flash */
       html, body {
