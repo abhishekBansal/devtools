@@ -32,7 +32,7 @@ fi
 echo "📋 Build summary:"
 echo "   - Environment: production simulation"
 echo "   - GA Measurement ID: G-TEST123456 (test)"
-echo "   - Domain validation: tools.abhishekbansal.dev"
+echo "   - Domain validation: devtools.anvik.studio"
 echo "   - Analytics status: conditional (production only)"
 
 echo ""

@@ -28,7 +28,7 @@ A comprehensive collection of essential developer tools built with React and Typ
 
 ### Web Interface
 
-Visit [tools.abhishekbansal.dev](https://tools.abhishekbansal.dev) to start using DevTools immediately.
+Visit [devtools.anvik.studio](https://devtools.anvik.studio) to start using DevTools immediately.
 
 ### CLI Installation
 

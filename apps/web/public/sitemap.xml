@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tools.abhishekbansal.dev/</loc>
+    <loc>https://devtools.anvik.studio/</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/base64-encoder-decoder</loc>
+    <loc>https://devtools.anvik.studio/tools/base64-encoder-decoder</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/json-validator-formatter</loc>
+    <loc>https://devtools.anvik.studio/tools/json-validator-formatter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/uuid-generator</loc>
+    <loc>https://devtools.anvik.studio/tools/uuid-generator</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/hex-text-converter</loc>
+    <loc>https://devtools.anvik.studio/tools/hex-text-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/timestamp-converter</loc>
+    <loc>https://devtools.anvik.studio/tools/timestamp-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/cron-expression-parser</loc>
+    <loc>https://devtools.anvik.studio/tools/cron-expression-parser</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/string-analyzer</loc>
+    <loc>https://devtools.anvik.studio/tools/string-analyzer</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/string-case-converter</loc>
+    <loc>https://devtools.anvik.studio/tools/string-case-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/xml-formatter</loc>
+    <loc>https://devtools.anvik.studio/tools/xml-formatter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/color-converter</loc>
+    <loc>https://devtools.anvik.studio/tools/color-converter</loc>
   </url>
   <url>
-    <loc>https://tools.abhishekbansal.dev/tools/text-diff</loc>
+    <loc>https://devtools.anvik.studio/tools/text-diff</loc>
   </url>
 </urlset>

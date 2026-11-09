@@ -106,7 +106,7 @@ trackSearch('json', 5)
 
 ### Analytics Not Working
 1. **Check GitHub Secret**: Ensure `GA_MEASUREMENT_ID` is set correctly
-2. **Verify Domain**: Analytics only runs on `tools.abhishekbansal.dev` or `*.github.io`
+2. **Verify Domain**: Analytics only runs on `devtools.anvik.studio`, `tools.abhishekbansal.dev` or `*.github.io`
 3. **Check Console**: Look for initialization messages in browser console
 4. **Validate Build**: Ensure environment variable is injected during build
 

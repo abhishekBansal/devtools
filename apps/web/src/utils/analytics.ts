@@ -3,7 +3,8 @@ import ReactGA from 'react-ga4';
 // Google Analytics configuration
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 const IS_PRODUCTION = import.meta.env.PROD;
-const IS_GITHUB_PAGES = window.location.hostname === 'tools.abhishekbansal.dev' || 
+const IS_GITHUB_PAGES = window.location.hostname === 'devtools.anvik.studio' || 
+                        window.location.hostname === 'tools.abhishekbansal.dev' || 
                         window.location.hostname.includes('github.io');
 
 // Only initialize GA in production and on GitHub Pages

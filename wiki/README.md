@@ -43,7 +43,7 @@ devtools <tool> <command> [options]
 
 ## 🌐 Web Interface
 
-Visit the [DevTools Web App](https://tools.abhishekbansal.dev) to use all tools through a user-friendly web interface.
+Visit the [DevTools Web App](https://devtools.anvik.studio) to use all tools through a user-friendly web interface.
 
 ## 📖 Contributing
 
